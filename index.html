@@ -1,87 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Happy Graduation!</title>
-<style>
-body {
-margin: 0;
-background: #0a192f; /* 深蓝学位袍底色 */
-overflow: hidden;
-font-family: 'Microsoft YaHei';
-}
-#congrats {
-position: absolute;
-top: 20%;
-left: 50%;
-transform: translateX(-50%);
-color: #f4f8f8; /* 荣耀金色 */
-font-size: 3rem;
-text-shadow: 0 0 15px rgba(244, 249, 249, 0.774);
-z-index: 10;
-text-align: center;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Happy Graduation!</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a192f; /* 深蓝学位袍底色 */
+      overflow: hidden;
+      font-family: 'Microsoft YaHei', sans-serif;
+    }
+    #congrats {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #f4f8f8; /* 荣耀金色 */
+      font-size: 3rem;
+      text-shadow: 0 0 15px rgba(244, 249, 249, 0.774);
+      z-index: 10;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-<!-- 中央祝福语 -->
-<div id="congrats">
-Congratulations for graduation!<br> Agri-Tech Engin. Ha Quang Hung <br>
-New chapter, more sparkles!<br>
-<span style="font-size:1.2rem">From: Msc. Cunxink</span>
-</div>
+  <!-- 中央祝福语 -->
+  <div id="congrats">
+    Congratulations for graduation!<br>
+    Agri-Tech Engin. Ha Quang Hung <br>
+    New chapter, more sparkles!<br>
+    <span style="font-size:1.2rem">From: Msc. Cunxink</span>
+  </div>
 
-<!-- 文字雨画布 -->
-<canvas id="canvas"></canvas>
+  <!-- 文字雨画布 -->
+  <canvas id="canvas"></canvas>
 
-<script>
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
 
-const gradSymbols = '🎓'; // 毕业帽Unicode
-const gradWords = 'GRADUATION|DIPLOMA|SUCCESS|FUTURE|2025|HUNGHA'.split('|');
-const texts = [...gradSymbols, ...gradWords.join('').split(''), ...'★☆☾☽♪♫']; 
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
 
-const fontSize = 16;
-const columns = canvas.width / fontSize;
-const drops = Array(columns).fill(1);
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-// 毕业主题色：蓝金配色
-const colors = ['#4B9CD3', '#87CEEB', '#FFD700', '#64FFDA']; 
+    const gradSymbols = '🎓';
+    const gradWords = 'GRADUATION|DIPLOMA|SUCCESS|FUTURE|2025|HUNGHA'.split('|');
+    const texts = [...gradSymbols, ...gradWords.join('').split(''), ...'★☆☾☽♪♫'];
 
-function draw() {
-// 半透明层实现拖尾效果
-ctx.fillStyle = 'rgba(10, 25, 47, 0.08)';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const fontSize = 16;
+    const columns = Math.floor(window.innerWidth / fontSize);
+    const drops = Array(columns).fill(1);
 
-// 动态绘制字符
-for (let i = 0; i < drops.length; i++) {
-const char = texts[Math.floor(Math.random() * texts.length)];
-const isCap = char === gradSymbols; // 
+    const colors = ['#4B9CD3', '#87CEEB', '#FFD700', '#64FFDA'];
 
-// 毕业帽放大显示
-ctx.font = isCap ? `bold ${fontSize * 1.8}px Arial` : `${fontSize}px Arial`;
-ctx.fillStyle = isCap ? '#FFD700' : colors[Math.floor(Math.random() * colors.length)];
+    function draw() {
+      ctx.fillStyle = 'rgba(10, 25, 47, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+      for (let i = 0; i < drops.length; i++) {
+        const char = texts[Math.floor(Math.random() * texts.length)];
+        const isCap = char === gradSymbols;
 
-if (drops[i] * fontSize > canvas.height || Math.random() > 0.97) {
-drops[i] = 0;
-}
-drops[i]++;
-}
-requestAnimationFrame(draw);
-}
+        ctx.font = isCap ? `bold ${fontSize * 1.8}px Arial` : `${fontSize}px Arial`;
+        ctx.fillStyle = isCap ? '#FFD700' : colors[Math.floor(Math.random() * colors.length)];
 
-// 响应式适配
-window.addEventListener('resize', () => {
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-});
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
 
-draw();
-</script>
+        if (drops[i] * fontSize > canvas.height || Math.random() > 0.97) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('load', draw);
+
+    // Cảnh báo với người dùng iPhone nếu hiệu ứng không chạy
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      console.log("Nếu bạn không thấy hiệu ứng, vui lòng reload lại trang hoặc tắt chế độ tiết kiệm pin.");
+    }
+  </script>
 </body>
 </html>
